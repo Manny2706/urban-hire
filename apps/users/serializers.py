@@ -58,3 +58,21 @@ class UserLogoutSerializer(serializers.Serializer):
         except TokenError as exc:
             raise serializers.ValidationError({'refresh': 'Refresh token is invalid or expired.'}) from exc
 
+class UserLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        try:
+            user = User.objects.get(email__iexact=email)
+        except User.DoesNotExist:
+            raise serializers.ValidationError('Invalid email or password.')
+
+        if not user.check_password(password):
+            raise serializers.ValidationError('Invalid email or password.')
+
+        attrs['user'] = user
+        return attrs
