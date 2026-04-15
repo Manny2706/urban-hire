@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .serializers import UserLogoutSerializer, UserSignupSerializer ,UserLoginSerializer
-from .models import User
+
 
 
 class UserSignupView(APIView):
